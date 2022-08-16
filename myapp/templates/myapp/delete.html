@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+{% block title %}Yangi post{% endblock title %}
+
+
+{% block content %}
+<h3>Delete Post</h3>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <h5>Siz rostanam <strong>"{{ obj }}"</strong> postni o'chirmoqchimisiz?</h5>
+
+    <a href="{{ request.META.HTTP_REFERER }}">Go back</a>
+    <br>
+    <button type="submit" class="btn btn-outline-danger">Xa</button>
+</form>
+
+{% endblock content %}

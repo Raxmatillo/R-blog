@@ -1,0 +1,37 @@
+{% extends 'main.html' %}
+{% block title %}{{ user }} tahrirlash{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    #hint_id_username,
+    #hint_id_password1,
+    #hint_id_password2 {
+        display: none;
+    }
+</style>
+
+<h3>Profilni yangilash</h3>
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ user_form|crispy }}
+    {{ profile_form|crispy }}
+    <button type="submit" class="btn-login link-small mt-3">Yangilash <i class="bi bi-check-lg"></i></button>
+</form>
+
+
+<script>
+
+    let data = document.querySelectorAll("label.requiredField");
+    data[2].innerHTML = 'Ismingiz';
+    data[3].innerHTML = 'Familyangiz';
+    data[4].innerHTML = 'Avatar';
+    data[5].innerHTML = "Currentmidii";
+</script>
+
+
+{% endblock content %}

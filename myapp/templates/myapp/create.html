@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+{% block title %}Yangi post{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h2>Yangi Post yozing</h2>
+
+<form action="" method="post">
+    {% csrf_token %}
+    
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-info">Saqlash <i class="bi bi-file-earmark-arrow-up"></i></button>
+</form>
+
+{% endblock content %}

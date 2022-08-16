@@ -1,0 +1,108 @@
+{% extends 'main.html' %}
+{% block title %}{{ user }}{% endblock title %}
+
+
+{% block content %}
+
+<h5 class="content-header">Profil</h5>
+
+<div class="card mb-3 border-0 shadow p-3">
+    <div class="row d-block mx-auto">
+        <div class="col-sm-12 text-center">
+            <div class="image-card">
+                <img src="{{ user.profile.image.url }}" class="img-fluid rounded-circle shadow mx-auto my-auto d-block w-100 h-100"
+                    alt="" srcset="">
+                <span class="overlay-mute text-mute">
+                    <a href="" class="link-img-mute">@{{ user.username}}</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="card-body">
+            <h5 class="content-header text-start">Haqida</h5>
+            <div class="dropdown-divider"></div>
+            <p class="card-text paragraph lead">{{ user.profile.description }}</p>
+
+
+            <h5 class="content-header text-start">Natijalar</h5>
+            <div class="dropdown-divider"></div>
+            <div class="box-group mt-3">
+                <div class="box">
+                    <p class="box-head">Likes <i class="bi bi-heart"></i></p>
+                    <hr class="box-hr">
+                    <span class="box-count">{{ likes }}</span>
+                </div>
+
+                <div class="box">
+                    <p class="box-head">Posts <i class="bi bi-list-columns"></i></p>
+                    <hr class="box-hr">
+                    <span class="box-count">{{ posts.count }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- user -->
+        <div class="card-footer bg-transparent">
+            <p class="mt-3">
+                <a class="btn-login link-small mt-3" href="{% url 'profile-update' %}">Yangilash <i class="bi bi-arrow-counterclockwise"></i></a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>User Profile</h3>
+
+
+
+<h5>{{ user.first_name }}</h5>
+
+<img src="{{ user.profile.image.url }}" width="320px" class="img-fluid rounded-circle" alt="" srcset="">
+<p>{{ user.profile.description }}</p>
+
+
+<p class="text-muted">{{ posts.count }} ta post yozgan</p>
+
+
+
+<br>
+<br>
+
+
+<div class="h5 lead">Baholang</div>
+<form action="{% url 'user_stars' user.id %}" method="post">
+    {% csrf_token %}
+
+    <button type="submit" name="stars" value="{{ user_stars }}" class="btn btn-secondary">Stars</button>
+
+</form>
+
+<p>Yulduzchalar {{ stars_count }} </p>
+
+{% if request.user.username == user.username %}
+<a href="{% url 'profile-update' %}">Update Profile</a>
+{% endif %}
+
+
+

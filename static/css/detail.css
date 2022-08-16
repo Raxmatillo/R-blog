@@ -1,0 +1,114 @@
+
+/* card */
+
+.shadow-card{
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    transition: box-shadow 0.3s ease-in;
+}
+
+.shadow-card:hover{
+    box-shadow: none !important;
+}
+
+/* .image-card{
+    position: relative;
+    height: 18rem;
+    width: 18rem;
+} */
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+    .image-card{
+        height: 15rem;
+        width: 15rem;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .image-card{
+        height: 11rem;
+        width: 11rem;
+        margin-top: 10%;
+        margin-bottom: 10%;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+    .image-card{
+        width: 8rem;
+        margin-top: 40%;
+        margin-bottom: 40%;
+        height: 8rem;
+    }
+    .paragraph{
+        font-size: small;
+    }
+}
+
+@media screen and (min-width: 0px) and (max-width: 576px) {
+    .image-card{
+        height: 18rem;
+        width: 18rem;
+        margin: 0 auto;
+    }
+}
+
+.overlay {
+    position: absolute; 
+    bottom: 0; 
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1; 
+    width: 100%;
+    transition: .5s ease;
+    opacity:0;
+    color: white;
+    padding: 2px;
+    text-align: center;
+  }
+  
+.image-card:hover .overlay{
+    opacity: 1;
+}
+
+.link-img{
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    transition: color 0.3s ease-out;
+}
+.link-img:hover{
+    color: #f1f1f1;
+}
+
+
+.link-head{
+    text-decoration: none;
+    color: #000f62;
+    transition: color 0.3s ease-out;
+}
+.link-head:hover{
+    text-decoration: none;
+    color: #0f0f0f;
+}
+
+
+/* /card */
+
+
+
+/* detail css */
+.image-card {
+    width: 4rem;
+    height: 4rem;
+    float: right;
+    align-items: center;
+}
+
+.link-small {
+    text-decoration: none;
+    color: black;
+    transition: all 0.5s ease-in-out;
+}
+.link-small:hover{
+    color: #000f62;
+}
+/* /detail css */

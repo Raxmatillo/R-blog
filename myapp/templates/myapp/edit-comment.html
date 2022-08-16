@@ -1,0 +1,7 @@
+{% if user.is_authenticated %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ a }}
+    <input type="text" placeholder="Izoh yozing..." name="comment"  value="{{ a }}" >
+</form>
+{% endif %}

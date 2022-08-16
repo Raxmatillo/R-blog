@@ -1,0 +1,32 @@
+{% for post in posts %}
+<div class="card mb-3 border-0 shadow-card p-3" style="max-height: 360px; overflow: hidden;">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="image-card">
+                <img src="{{ post.author.profile.image.url }}" class="img-fluid mx-auto my-auto d-block w-100 h-100"
+                    alt="{{ post.title }}" srcset="">
+                <span class="overlay text-mute">
+                    <a href="{% url 'user-profile' post.author.pk %}" class="link-img">@{{ post.author }}</a>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <a href="{% url 'detail' post.id %}" class="link-head">{{ post.title }}</a>
+                </h3>
+                <div class="dropdown-divider"></div>
+                <small class="text-muted paragraph">
+                    {% if post.updated != post.created %}
+                    <i class="bi bi-clock"></i> Vaqti: {{ post.created|date:"d/m/Y H:i" }}
+                    {{ post.updated|date:"d/m/Y H:i" }} da tahrirlandi
+                    {% else %}
+                    <i class="bi bi-clock"></i> Vaqti: {{ post.created|date:"d/m/Y H:i" }}
+                    {% endif %}
+                    {% if post.likes.count != 0 %} | <i class="bi bi-heart"></i> Like {{ post.likes.count }} {% endif %}</small>
+                <p class="card-text paragraph">{{ post.content|truncatewords:50|safe }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

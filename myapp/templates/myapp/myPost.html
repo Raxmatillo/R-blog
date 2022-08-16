@@ -1,0 +1,80 @@
+{% extends 'main.html' %}
+{% block title %}Postlarim{% endblock title %}
+
+{% block content %}
+
+<style>
+    ul{
+        list-style: none;
+    }
+</style>
+
+{% if user.username == post.author.username %}
+<li>
+    <small>
+        <a href="{% url 'update-post' post.pk %}">Update</a> |
+        <a href="{% url 'delete-post' post.pk %}">Delete</a>
+    </small>
+</li>
+{% endif %}
+
+
+{% if posts %}
+    {% for post in posts %}
+    <div style="display: flex">
+        <div style="display: block;">
+            <img src="{{ post.author.profile.image.url }}" width="320px" alt="" srcset="">
+            <small style="display: block;"><a href="{% url 'user-profile' post.author.pk %}">@{{ post.author }}</a></small>
+        </div>
+
+        <ul>
+            <li>
+                <h3><a href="{% url 'detail' post.id %}">{{ post.title }}</a></h3>
+                {% if post.updated != post.created %}
+                <small>Vaqti: {{ post.created|date:"d/m/Y H:i" }}</small>
+                <small>{{ post.updated|date:"d/m/Y H:i" }} da tahrirlandi</small>
+                {% else %}
+                <small>Vaqti: {{ post.created|date:"d/m/Y H:i" }}</small>
+                {% endif %}
+            </li>
+            <li>
+                <p>{{ post.content|truncatewords:30 }}</p>
+            </li>
+            <li>Kategoriya: {{ post.category }}</li>
+           
+           {% if post.likes.count != 0 %}
+            <li>{{ post.likes.count }} ta like</li>
+            {% endif %}
+        </ul>
+
+    </div>
+    <hr>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if posts.has_previous %}
+                <a href="?page=1">&laquo; Ilk</a>
+                <a href="?page={{ posts.previous_page_number }}">oldingi</a>
+            {% endif %}
+    
+            <span class="current" style="color:red">
+                Sahifalar {{ posts.number }} / {{ posts.paginator.num_pages }}
+            </span>
+    
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}">keyingi</a>
+                <a href="?page={{ posts.paginator.num_pages }}">so'nggi &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+
+{% else %}
+    <p>Postlar yo'q</p>
+{% endif %}
+
+
+
+
+{% endblock content %}

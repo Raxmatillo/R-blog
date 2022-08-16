@@ -1,0 +1,78 @@
+{% extends 'main.html' %}
+{% block title %}Postlar{% endblock title %}
+
+{% block content %}
+
+<style>
+    img{
+        display: none;
+    }
+</style>
+
+{% if posts %}
+
+<h5 class="content-header">Barcha postlar</h5>
+
+{% for post in posts %}
+    <div class="card mb-3 border-0 shadow-card p-3">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="image-card">
+                    <img src="{{ post.author.profile.image.url }}" class="img-fluid mx-auto my-auto d-block w-100 h-100" alt="{{ post.title }}" srcset="">
+                    <span class="overlay text-mute">
+                        <a href="{% url 'user-profile' post.author.pk %}" class="link-img">@{{ post.author }}</a>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{% url 'detail' post.slug %}" class="link-head">{{ post.title }}</a>
+                    </h3>
+                    <div class="dropdown-divider"></div>
+                    <small class="text-muted paragraph">
+                        {% if post.updated != post.created %}
+                            Vaqti: {{ post.created|date:"d/m/Y H:i" }} |
+                            {{ post.updated|date:"d/m/Y H:i" }} da tahrirlandi
+                        {% else %}
+                            Vaqti: {{ post.created|date:"d/m/Y H:i" }}
+                        {% endif %}
+                        {% if post.likes.count != 0 %} | Like {{ post.likes.count }} {% endif %}</small>
+
+                    <p class="card-text paragraph">{{ post.content|truncatewords:50|safe }} 
+                        <a href="{% url 'detail' post.slug %}" class="link-login">batafsil</a>
+                    </p>
+                    <!-- <form action="">
+                                    <button type="submit" class="btn btn-secondary">Like</button>
+                                </form> -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Pagination -->
+<ul class="pagination justify-content-center">
+    {% if posts.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo; Yangi</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Oldingi</a></li>
+    {% endif %}
+
+    <li class="page-item active"><div class="page-link"><i class="bi bi-card-list"></i> Sahifalar {{ posts.number }} / {{ posts.paginator.num_pages }}</div></li>
+
+    {% if posts.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Kegingi</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">So'nggi &raquo;</a></li>
+    {% endif %}
+</ul>
+<!-- /Pagination -->
+
+
+{% else %}
+<h5 class="content-header">Postlar topilmadi !</h5>
+
+{% endif %}
+
+
+
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% block title %}Yangilash{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h2>Create Template</h2>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-primary">Yangilash <i class="bi bi-check-lg"></i></button>
+</form>
+
+{% endblock content %}

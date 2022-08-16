@@ -1,0 +1,239 @@
+{% extends 'main.html' %}
+{% block title %}{{ post.title }}{% endblock title %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+    img {
+        max-width: 630px;
+        max-width: 100%;
+    }
+
+    .single-page {
+        max-height: fit-content;
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 992px) {
+        .singular {
+            display: block;
+        }
+    }
+    @media screen and (max-width: 768px){
+        .singular{
+            display: none;
+        }
+    }
+</style>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+
+<h5 class="content-header">Batafsil</h5>
+
+<!-- Detail page -->
+<div class="card mb-3 border-0 shadow p-3">
+    <!-- Page header -->
+    <div class="row">
+        <div class="card-body">
+            <h3 class="card-header bg-transparent">{{ post.title }}</h3>
+            <small class="text-muted paragraph">
+                {% if post.updated != post.created %}
+                <i class="bi bi-clock"></i> Vaqti: {{ post.created|date:"d/m/Y H:i" }} | <i
+                    class="bi bi-pencil-square"></i>
+                {{ post.updated|date:"d/m/Y H:i" }} da tahrirlandi
+                {% else %}
+                <i class="bi bi-clock"></i> Vaqti: {{ post.created|date:"d/m/Y H:i" }}
+                {% endif %}
+                {% if post.likes.count != 0 %} | <i class="bi bi-heart"></i> Like {{ post.likes.count }} {% endif %}
+            </small>
+
+        </div>
+    </div>
+    <!-- /Page header -->
+
+    <!-- Page body -->
+    <div class="row">
+        <div class="col-12">
+            <p class="card-text paragraph lead px-3">
+                {{ post.content|safe }}</p>
+            <div class="my-3 font-medium d-flex justify-content-end" style="font-style: italic; font-weight: 600;">
+                Tayyorladi: <a class="link-small" href="{% url 'user-profile' post.author.id %}">
+                    {% if post.author.first_name or post.author.last_name %} 
+                    {{ post.author.first_name }} {{ post.author.last_name }}
+                    {% else %} 
+                    {{ post.author }}
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+        <div class="card-footer bg-transparent">
+            <div class="row">
+                <div class="d-sm-flex justify-content-between">
+                    <form action="{% url 'post-like' post %}" method="post">
+                        {% csrf_token %}
+
+                        <button type="submit" class="btn btn-secondary mt-3" id="like-segment" name="comment_id" value="{{ post.id }}">
+                            <i class="bi bi-heart"></i> Like {{ post.likes.count }}</button>
+                        <div class="btn btn-info mt-3"><i class="bi bi-eye"></i> Ko'rildi: {{ hits }}</div>
+                    </form>
+
+                    <!-- Login -->
+                    {% if request.user == post.author %}
+                    <div>
+                        <a href="{% url 'update-post' post.slug %}" class="btn btn-outline-success mt-3">
+                            <i class="bi bi-pen"></i> Tahrirlash</a>
+                        <a href="{% url 'delete-post' post.slug %}" class="btn btn-danger mt-3">
+                            <i class="bi bi-trash"></i> O'chirish</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page body -->
+</div>
+<!-- /Detail page -->
+
+
+<!-- Comment section -->
+{% if post_comments %}
+<h5 class="content-header text-start mt-3" id="comments">Izohlar</h5>
+<div class="card border-0 shadow-sm mb-3 comments">
+    <ul class="list-group-flush">
+        {% for comment in post_comments %}
+        <li class="list-group-item">
+            <!-- <div class="row d-flex justify-content-between bg-info"> -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="comment-user">
+                    <div class="comment-image">
+                        <img src="{{ comment.user.profile.image.url }}"
+                            class="img-fluid w-100 h-100 rounded-circle text-start" alt="{{ comment.user }}" srcset="">
+                    </div>
+                    <span class="comment-username">
+                        <a href="{% url 'user-profile' comment.user.profile.pk %}" class="comment-username__link">
+                            @{{ comment.user }}
+                        </a>
+                    </span>
+                </div>
+                <div>
+
+                    {% if user.username == comment.user.username %}
+                    <div class="btn-group dropend ">
+                        <i class="bi bi-three-dots-vertical fa-md" data-bs-toggle="dropdown"></i>
+                        <ul class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                            <li>
+                                <a class="dropdown-item text-success" href="{% url 'update-comment' comment.id %}#comments">
+                                    <i class="bi bi-pencil"></i> Tahrirlash
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'delete-comment' comment.id %}">
+                                    <i class="bi bi-trash"></i> O'chirish
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <span class="time">
+                {% if comment.updated != comment.created %}
+                <i class="bi bi-pencil"></i> {{ comment.updated|date:" H:i" }} 
+                {% else %}
+                <i class="bi bi-clock"></i> {{ comment.created|date:" H:i" }}
+                {% endif%}
+
+                {% if post.author.username == comment.user.username %}
+                <span style="background-color: gray; border-radius: 10px; color: #fff; padding: 2px 4px; font-size: x-small; display: inline;opacity: .7;">Author<i class="bi bi-check"></i></span>
+                {% endif %}
+            </span>
+            <p class="lead">
+                {% if post.author.username == comment.user.username %}
+                <b>{{ comment.content }}</b>
+                {% else %}
+                {{ comment.content }}
+                {% endif %}
+            </p>
+        </li>
+        <hr class="box-hr mb-3">
+        {% endfor %}
+
+    </ul>
+</div>
+{% endif %}
+<!-- /Comment section -->
+
+
+<!-- Comment form (if login) -->
+{% if user.is_authenticated %}
+<form action="" class="mb-3" method="post">
+    {% csrf_token %}
+    <label for="comments-input" class="form-label">Izoh yozing</label>
+    <input type="text" id="comments-input" name="comment" value="{{ edit_comment }}" class="form-control"
+        placeholder="Izoh..." role="link" href="#comments" />
+</form>
+{% endif %}
+<!-- /Comment form -->
+
+<!-- Recomentdation-link section -->
+<div class="rec">
+    {% for tag in post.tags.all %}
+    <a href="{% url 'home' %}?tag={{ tag }}" class="link-rec shadow-card">{{ tag }}</a>
+    {% endfor %}
+</div>
+<!-- /Recomentdation-link section -->
+
+
+
+{% if posts %}
+
+<h5 class="content-header mt-3">O'xshash postlar</h5>
+
+{% for post in posts %}
+<div class="card mb-3 border-0 shadow-card p-3" style="max-height: 360px;">
+    <div class="row">
+        <div class="col-md-3 singular">
+            <div class="image-card">
+                <img src="{{ post.author.profile.image.url }}" class="img-fluid mx-auto my-auto d-block w-100 h-100"
+                    alt="{{ post.title }}" srcset="">
+                <span class="overlay text-mute">
+                    <a href="{% url 'user-profile' post.author.pk %}" class="link-img">@{{ post.author }}</a>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-9 mx-auto d-block">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <a href="{% url 'detail' post.slug %}" class="link-head">{{ post.title }}</a>
+                </h3>
+                <div class="dropdown-divider"></div>
+                <small class="text-muted paragraph">
+                    {% if post.updated != post.created %}
+                    <i class="bi bi-clock"></i> Vaqti: {{ post.created|date:"d/m/Y H:i" }}
+                    {{ post.updated|date:"d/m/Y H:i" }} da tahrirlandi
+                    {% else %}
+                    <i class="bi bi-clock"></i> Vaqti: {{ post.created|date:"d/m/Y H:i" }}
+                    {% endif %}
+                    {% if post.likes.count != 0 %} | <i class="bi bi-heart"></i> Like {{ post.likes.count }} {% endif %}
+                </small>
+                <div class="single-page">
+                    <p class="card-text paragraph">{{ post.content|truncatewords:50|safe }} <a href="{% url 'detail' post.slug %}" class="link-login">batafsil</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+
+
+
+{% endblock content %}
