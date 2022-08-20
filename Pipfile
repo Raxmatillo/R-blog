@@ -12,6 +12,7 @@ djangorestframework = "*"
 django-taggit = "*"
 django-ckeditor = "*"
 gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
